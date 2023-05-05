@@ -4,4 +4,5 @@
 
 ## HƯỚNG DẪN CHẠY PROJECT BẰNG IDE `VISUAL STUDIO CODE`
 > Vì tính đơn giản chỉ sử dụng dưới mục đích Bài tập lớn, nên không cần build những gói Java như Maven hay Gradle.
+
 > Cũng như không cần sử dụng các IDE chuyên dụng cho Java.
