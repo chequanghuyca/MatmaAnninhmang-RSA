@@ -16,17 +16,17 @@ public class App {
         }
     }
 
-    /* Ham Inverse su dung de quy de tim gia tri x va y phu hợp voi dieu kien da cho:
-            - Neu b bang 1, ta tra ve gia tri x bang 1 va y bang a - 1. Dieu nay dua tren tinh chat: a1 - b(a-1) = a - b*a + b = 1.
-            - Neu a bang 1, ta tra ve gia tri x bang 1 va y bang 0. Dieu nay dua tren tinh chat: a1 - b0 = a.
-            - Neu a lon hon b, ta thuc hien phep toan % de lay phan du cua a chia cho b, va tiep tuc goi de quy ham Inverse voi cac tham so a la phan du tren va b la b. 
-            Sau đo, ta tinh toan gia tri x va y nhu sau:
-                x bang gia tri x duoc tra ve boi ham de quy.
-                y bang a/b*x + y, trong do a/b la phep chia nguyen cua a cho b, va y la gia tri y duoc tra ve boi ham de quy.
-            Neu a nho hon b, ta thuc hien phep toan % de lay phan du cua b chia cho a, va tiep tuc goi de quy ham Inverse voi cac tham so a la a va b la phan du tren. Sau đo, ta tinh toan gia tri x va y nhu sau:
-               x bang b/a*y + x, trong do b/a la phep chia nguyen cua b cho a, va x la gia tri x duoc tra ve boi ham de quy.
-               y bang gia tri y duoc tra ve boi ham de quy.
-           Cuoi cung, ham Inverse tra ve mot mang BigInteger chua gia tri x va y tuong ung.
+    /* Ham Inverse su dung de quy de tim gia tri x va y phu hop voi dieu kien da cho:
+        - Neu b bang 1, ta tra ve gia tri x bang 1 va y bang a - 1. Dieu nay dua tren tinh chat: a1 - b(a-1) = a - b*a + b = 1.
+        - Neu a bang 1, ta tra ve gia tri x bang 1 va y bang 0. Dieu nay dua tren tinh chat: a1 - b0 = a.
+        - Neu a lon hon b, ta thuc hien phep toan % de lay phan du cua a chia cho b, va tiep tuc goi de quy ham Inverse voi cac tham so a la phan du tren va b la b. 
+        Sau đo, ta tinh toan gia tri x va y nhu sau:
+            x bang gia tri x duoc tra ve boi ham de quy.
+            y bang a/b*x + y, trong do a/b la phep chia nguyen cua a cho b, va y la gia tri y duoc tra ve boi ham de quy.
+        Neu a nho hon b, ta thuc hien phep toan % de lay phan du cua b chia cho a, va tiep tuc goi de quy ham Inverse voi cac tham so a la a va b la phan du tren. Sau đo, ta tinh toan gia tri x va y nhu sau:
+            x bang b/a*y + x, trong do b/a la phep chia nguyen cua b cho a, va x la gia tri x duoc tra ve boi ham de quy.
+            y bang gia tri y duoc tra ve boi ham de quy.
+        Cuoi cung, ham Inverse tra ve mot mang BigInteger chua gia tri x va y tuong ung.
     */
     static BigInteger[] Inverse(BigInteger a, BigInteger b) { 
         if (b.compareTo(BigInteger.ONE) == 0) {
@@ -93,7 +93,7 @@ public class App {
     /*  Sinh mot so nguyen ngau nhien nho hon mot so nguyen duong n cho truoc. 
         No su dung doi tuong cua lop java.util.Random de sinh so ngau nhien va tra ve mot doi tuong BigInteger voi gia tri nho hon n. 
     */
-    static BigInteger RandomBigInteger(BigInteger m, BigInteger n) {
+    static BigInteger RandomBigInteger(BigInteger m, BigInteger n) { //Tao bo khoa ngau nhien 2 so nguyen to lon
         Random randNum = new Random();
         int len = n.bitLength();
         BigInteger res = new BigInteger(len, randNum);
@@ -294,6 +294,9 @@ public class App {
     public static void main(String args[]) throws Exception {
         BigInteger two = new BigInteger("2");
         
+        /*  Buoc dau tien la sinh ra khoa cong khai va khoa bi mat. Trong do, khoa cong khai duoc tao bang cach sinh ra mot so nguyen to ngau nhien co do dai la 1024 bit, goi la e. 
+            Sau do, kiem tra xem e co chia het cho 2 hay khong, neu co thi tang gia tri cua e len mot don vi de dam bao e la so le.
+        */ 
         System.out.println("Sinh ra e");
         Random rand = new Random();
         BigInteger e = new BigInteger(1024, rand);
@@ -314,6 +317,9 @@ public class App {
         System.out.println("p + 1 chia het cho mot Large-prime: " + p1);
         System.out.println("\n");
 
+        /*  Tao ra hai so nguyen to manh la p va q. Hai so nguyen to nay co do dai la 512 bit va duoc tao ra bang phuong phap chon ngau nhien mot so nguyen to lon roi kiem tra tinh manh cua no 
+            bang cach kiem tra tinh chia het cua p-1 va p+1 cho mot so nguyen to lon, tuong tu voi q-1 va q+1.
+        */
         System.out.println("Sinh ra Strong-prime q");
         BigInteger q = new BigInteger("512");
         BigInteger[] list2 = getstrongPrime(512, e);
@@ -325,7 +331,7 @@ public class App {
         System.out.println("q + 1 chia het cho mot Large-prime: " + q1);
         System.out.println("\n");
 
-        System.out.println("Message:");
+        System.out.println("Message:"); //Sinh ra noi dung nguoi gui muon gui di voi dieu kien la do dai cua noi dung nho hon do dai cua p*q
         Random randNum = new Random();
         BigInteger m = new BigInteger(1024, randNum);
         //Ensure that m < p*q
@@ -333,16 +339,24 @@ public class App {
         System.out.println(m); 
         System.out.println("\n");
 
+        /*  Ma hoa Encrypt tin nhan bang cach su dung khoa cong khai e, va hai so nguyen to p va q da duoc tao ra truoc do.
+        */
         System.out.println("Encryption:");
         BigInteger c = Encrypt(m, e, p, q);
         System.out.println(c);  
         System.out.println("\n");
 
+        /*  Doan code tinh toan khoa bi mat d bang cach tinh nghich dao modulo cua e theo cong thuc d = e^(-1) mod phi(n), trong do phi(n) la ham Euler duoc tinh bang (p-1)*(q-1).
+            Su dung ham PhiInv ben tren
+         */
         System.out.println("Inverse modulo phi:");
         BigInteger d = PhiInv(e, p, q);
         System.out.println(d);  
         System.out.println("\n");
 
+        /*  Doan code giai ma tin nhan bang cach su dung khoa bi mat d va hai so nguyen to p va q da duoc tao ra truoc do. Ket qua giai ma se giong voi tin nhan ban dau.
+            Giai ma Decrypt
+        */
         System.out.println("Decryption:");
         m = Decrypt(c, d, p, q);
         assert(m.compareTo(p.multiply(q)) == -1);
